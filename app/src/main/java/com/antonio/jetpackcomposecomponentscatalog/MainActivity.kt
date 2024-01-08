@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,9 +21,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
@@ -74,14 +80,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetPackComposeComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
-                var selected by rememberSaveable { mutableStateOf("Antonio") }
+                //var selected by rememberSaveable { mutableStateOf("Antonio") }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column {
-                        MyRadioButtonList(selected, {selected=it} )
-                    }
+//                    Column {
+//                        MyRadioButtonList(selected, {selected=it} )
+//                    }
+
+                    MyBadgeBox()
                 }
 
 //                  Este codigo es de MyTriStatusCheckBox()
@@ -106,29 +114,66 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     JetPackComposeComponentsCatalogTheme {
-        MyCheckBoxWithText()
+        MyBadgeBox()
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyBadgeBox() {
+    Box(modifier = Modifier.padding(16.dp).background(Color.Blue)
+    ) {
+    BadgedBox(badge = { Badge { Text(text = "1000") } }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Star,
+            contentDescription = ""
+        )
+    }
+    }
+}
+
+
+@Composable
+fun MyCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 36.dp),
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(contentColor = Color.Green, containerColor = Color.Red),
+        border = BorderStroke(5.dp, Color.Green)
+    ) {
+
+        Column(Modifier.padding(16.dp)) {
+            Text(text = "Ejemplo 1")
+            Text(text = "Ejemplo 2")
+            Text(text = "Ejemplo 3")
+        }
     }
 }
 
 @Composable
-fun MyRadioButtonList(name:String,onItemSelected:(String)-> Unit) {
+fun MyRadioButtonList(name: String, onItemSelected: (String) -> Unit) {
 
-    Column (Modifier.fillMaxWidth()){
-        Row (){
-            RadioButton(selected = name=="Antonio", onClick = { onItemSelected("Antonio") })
-            Text(text = "Antonio",modifier=Modifier.padding(top=12.dp))
+    Column(Modifier.fillMaxWidth()) {
+        Row() {
+            RadioButton(selected = name == "Antonio", onClick = { onItemSelected("Antonio") })
+            Text(text = "Antonio", modifier = Modifier.padding(top = 12.dp))
         }
-        Row (){
-            RadioButton(selected =  name=="Remi", onClick = {   onItemSelected("Remi")  })
-            Text(text = "Remi",modifier=Modifier.padding(top=12.dp))
+        Row() {
+            RadioButton(selected = name == "Remi", onClick = { onItemSelected("Remi") })
+            Text(text = "Remi", modifier = Modifier.padding(top = 12.dp))
         }
-        Row (){
-            RadioButton(selected =  name=="Antia", onClick = {   onItemSelected("Antia") })
-            Text(text = "Antia",modifier=Modifier.padding(top=12.dp))
+        Row() {
+            RadioButton(selected = name == "Antia", onClick = { onItemSelected("Antia") })
+            Text(text = "Antia", modifier = Modifier.padding(top = 12.dp))
         }
-        Row (){
-            RadioButton(selected =  name=="Oscar", onClick = {   onItemSelected("Oscar") })
-            Text(text = "Oscar",modifier=Modifier.padding(top=12.dp))
+        Row() {
+            RadioButton(selected = name == "Oscar", onClick = { onItemSelected("Oscar") })
+            Text(text = "Oscar", modifier = Modifier.padding(top = 12.dp))
         }
     }
 }
@@ -143,7 +188,7 @@ fun MyRadioButton() {
                 unselectedColor = Color.Yellow,
             )
         )
-        Text(text = "Ejemplo 1",modifier=Modifier.padding(top=12.dp))
+        Text(text = "Ejemplo 1", modifier = Modifier.padding(top = 12.dp))
     }
 
 }
