@@ -70,7 +70,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.antonio.jetpackcomposecomponentscatalog.ui.theme.CheckInfo
+import com.antonio.jetpackcomposecomponentscatalog.ui.CheckInfo
 import com.antonio.jetpackcomposecomponentscatalog.ui.theme.JetPackComposeComponentsCatalogTheme
 import kotlinx.coroutines.selects.select
 
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
 //                        MyRadioButtonList(selected, {selected=it} )
 //                    }
 
-                    MyBadgeBox()
+                    MyTextField()
                 }
 
 //                  Este codigo es de MyTriStatusCheckBox()
@@ -110,11 +110,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     JetPackComposeComponentsCatalogTheme {
-        MyBadgeBox()
+        MyTextField()
     }
 }
 
@@ -122,7 +122,9 @@ fun GreetingPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBadgeBox() {
-    Box(modifier = Modifier.padding(16.dp).background(Color.Blue)
+    Box(modifier = Modifier
+        .padding(16.dp)
+        .background(Color.Blue)
     ) {
     BadgedBox(badge = { Badge { Text(text = "1000") } }
     ) {
@@ -343,6 +345,10 @@ fun MyIcon() {
         imageVector = Icons.Rounded.Star,
         contentDescription = "icono",
         tint = Color.Red
+        //implementada la libreria --> implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+        //en gradle, se utiliza para tener acceso a muchos mas iconos, OJO dice Aris que ocupa una barbaridad, y que
+        //si no es necesaria mejor no implementarla
+        //https://fonts.google.com/icons  --> Url de google par ver los iconos disponibles con esta libreria
     )
 }
 
