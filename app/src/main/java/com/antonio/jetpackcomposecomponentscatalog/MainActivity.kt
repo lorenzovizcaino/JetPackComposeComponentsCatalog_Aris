@@ -8,11 +8,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,6 +35,9 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -71,6 +76,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.antonio.jetpackcomposecomponentscatalog.ui.CheckInfo
+import com.antonio.jetpackcomposecomponentscatalog.ui.MyRangeSlider
+import com.antonio.jetpackcomposecomponentscatalog.ui.advancedSlider
+import com.antonio.jetpackcomposecomponentscatalog.ui.basicSlider
 import com.antonio.jetpackcomposecomponentscatalog.ui.theme.JetPackComposeComponentsCatalogTheme
 import kotlinx.coroutines.selects.select
 
@@ -78,18 +86,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var lista =
+                listOf<String>("Juan", "Maria", "Julia", "Perico", "Antonio", "Remi", "Antia")
             JetPackComposeComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
                 //var selected by rememberSaveable { mutableStateOf("Antonio") }
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    //modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    Column {
 //                        MyRadioButtonList(selected, {selected=it} )
 //                    }
 
-                    MyTextField()
+                    //MyTextField()
+                    //Myprueba(lista)
+                    MyRangeSlider()
                 }
 
 //                  Este codigo es de MyTriStatusCheckBox()
@@ -108,31 +120,109 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     JetPackComposeComponentsCatalogTheme {
-        MyTextField()
+        MyBadgeBox()
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDropDownMenu() {
+    var selectedText by rememberSaveable { mutableStateOf("") }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val desserts = listOf("Helado", "Chocolate", "Cafe", "Natillas", "Fruta")
+
+
+    Column(modifier = Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            enabled = false,
+            readOnly = true,
+            modifier = Modifier
+                .clickable { expanded = true }
+                .fillMaxWidth()
+        )
+
+        //cuando se pulse el OutlinedTextField el boolean pasa a true y se abre el DropdownMenu
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {expanded = false},  //se llama cuando se cierra el DropdownMenu, pasandolo a false se cierra el mismo
+            modifier = Modifier.fillMaxWidth().padding(start = 15.dp),
+        ) {
+            desserts.forEach { dessert ->
+                DropdownMenuItem(
+                    text = { dessert },
+                    onClick = {
+                        expanded = false
+                        selectedText = dessert
+
+                    },
+                )
+                Text(text = dessert)
+            }
+        }
+
+
+    }
+}
+
+@Composable
+fun MyDivider() {
+    Divider(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(16.dp), color = Color.Green
+    )
+}
+
+@Composable
+fun Myprueba(lista: List<String>) {
+    var seleccion by rememberSaveable { mutableStateOf("Juan") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 100.dp),
+        verticalArrangement = Arrangement.Center,
+
+        ) {
+        lista.forEach { item ->
+            Row() {
+                RadioButton(selected = seleccion == item, onClick = { seleccion = item })
+                Text(item, modifier = Modifier.padding(top = 12.dp))
+            }
+        }
+        Text(text = "Ha sido selecionado $seleccion")
+
+
+    }
+
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBadgeBox() {
-    Box(modifier = Modifier
-        .padding(16.dp)
-        .background(Color.Blue)
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .background(Color.Blue)
     ) {
-    BadgedBox(badge = { Badge { Text(text = "1000") } }
-    ) {
-        Icon(
-            imageVector = Icons.Default.Star,
-            contentDescription = ""
-        )
-    }
+        BadgedBox(badge = { Badge { Text(text = "1000") } }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = ""
+            )
+        }
     }
 }
 
@@ -149,7 +239,7 @@ fun MyCard() {
         border = BorderStroke(5.dp, Color.Green)
     ) {
 
-        Column(Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Ejemplo 1")
             Text(text = "Ejemplo 2")
             Text(text = "Ejemplo 3")
