@@ -80,14 +80,19 @@ import com.antonio.jetpackcomposecomponentscatalog.ui.MyRangeSlider
 import com.antonio.jetpackcomposecomponentscatalog.ui.advancedSlider
 import com.antonio.jetpackcomposecomponentscatalog.ui.basicSlider
 import com.antonio.jetpackcomposecomponentscatalog.ui.theme.JetPackComposeComponentsCatalogTheme
+import com.antonio.jetpackcomposecomponentscatalog.ui.theme.MyAlertDialog
+import com.antonio.jetpackcomposecomponentscatalog.ui.theme.MyConfirmmationDialog
+import com.antonio.jetpackcomposecomponentscatalog.ui.theme.MyCustomDialog
+import com.antonio.jetpackcomposecomponentscatalog.ui.theme.MySimpleCustomDialog
 import kotlinx.coroutines.selects.select
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var lista =
-                listOf<String>("Juan", "Maria", "Julia", "Perico", "Antonio", "Remi", "Antia")
+            var lista =listOf<String>("Juan", "Maria", "Julia", "Perico", "Antonio", "Remi", "Antia")
+            var show by rememberSaveable {mutableStateOf(false)}
+            var email by rememberSaveable {mutableStateOf("")}
             JetPackComposeComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
                 //var selected by rememberSaveable { mutableStateOf("Antonio") }
@@ -95,13 +100,21 @@ class MainActivity : ComponentActivity() {
                     //modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Column {
-//                        MyRadioButtonList(selected, {selected=it} )
-//                    }
+                    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally ){
+                       Button(onClick = { show=true }) {
+                           Text(text = "Mostrar Dialogo")
+                       }
+//                        email=MyCustomDialog(show = show, onDismiss = {show=false})
+                        email=MyConfirmmationDialog(show=show,onDismiss={show=false})
+                        if(email!=""){
+                            Text(text = "Has elegido: $email")
+                        }
 
-                    //MyTextField()
-                    //Myprueba(lista)
-                    MyRangeSlider()
+
+                    }
+                    //MyDialog(show = show, onDismiss = {show=false}, onConfirm = {Log.i("Antonio","click")} )
+                   // MySimpleCustomDialog(show = show, onDismiss = {show=false})
+
                 }
 
 //                  Este codigo es de MyTriStatusCheckBox()
@@ -155,7 +168,9 @@ fun MyDropDownMenu() {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = {expanded = false},  //se llama cuando se cierra el DropdownMenu, pasandolo a false se cierra el mismo
-            modifier = Modifier.fillMaxWidth().padding(start = 15.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp),
         ) {
             desserts.forEach { dessert ->
                 DropdownMenuItem(
